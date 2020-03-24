@@ -1,0 +1,56 @@
+{
+  "variables": {
+    "client_id": "{{env `ARM_CLIENT_ID` }}",
+    "client_secret": "{{env `ARM_CLIENT_SECRET` }}",
+    "subscription_id": "{{env `ARM_SUBSCRIPTION_ID` }}",
+    "tenant_id": "{{env `ARM_TENANT_ID` }}",
+    "managed_image_name": "{{env `ARM_IMAGE_NAME`}}",
+    "resource_group_name": "{{env `ARM_RESOURCE_GROUP_NAME` }}",
+    "virtual_network_name": "{{env `ARM_VNET_NAME` }}",
+    "virtual_network_subnet_name": "{{env `ARM_SUBNET_NAME` }}",
+    "virtual_network_resource_group_name": "{{env `ARM_VNET_RG_NAME` }}",
+    "ssh_username": "{{env `ARM_SSH_USERNAME` }}",
+    "ssh_password": "{{env `ARM_SSH_PASSWORD` }}",
+    "image_sku": "{{env `ARM_IMAGE_SKU` }}"
+  },
+  "builders": [
+    {
+      "type": "azure-arm",
+      "client_id": "{{user `client_id`}}",
+      "client_secret": "{{user `client_secret`}}",
+      "tenant_id": "{{user `tenant_id`}}",
+      "subscription_id": "{{user `subscription_id`}}",
+      "os_type": "Linux",
+      "ssh_username": "{{user `ssh_username`}}",
+      "ssh_password": "{{user `ssh_password`}}",
+      "image_publisher": "Canonical",
+      "image_offer": "UbuntuServer",
+      "image_sku": "{{user `image_sku`}}",
+      "location": "West Europe",
+      "vm_size": "Standard_B2s",
+      "virtual_network_name": "{{user `virtual_network_name` }}",
+      "virtual_network_subnet_name": "{{user `virtual_network_subnet_name` }}",
+      "virtual_network_resource_group_name": "{{user `virtual_network_resource_group_name` }}",
+      "private_virtual_network_with_public_ip": false,
+      "managed_image_name": "{{user `managed_image_name` }}",
+      "managed_image_resource_group_name": "{{user `resource_group_name` }}",
+      "async_resourcegroup_delete": true
+    }
+  ],
+  "provisioners": [
+    {
+        "type": "file",
+        "source": "/files/test.txt",
+        "destination": "/tmp/test.txt"
+    },
+
+    {
+        "type" : "shell",
+        "inline": [
+            "echo 127.0.0.1 $(hostname) | sudo tee -a /etc/hostname",
+            "sudo apt-get update",
+            "sudo apt-get upgrade -y"
+        ]
+    }
+    ]
+}

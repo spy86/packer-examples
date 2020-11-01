@@ -1,32 +1,10 @@
 {
   "variables": {
-    "version": ""
+    "version": "{{env `VAGRANT_BOX_VERSION` }}",
+    "cloud_token": "{{env `VAGRANT_CLOUD_TOKEN` }}"
   },
-  "provisioners": [
-    {
-      "type": "shell",
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/ansible.sh"
-    },
-    {
-      "type": "shell",
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/setup.sh"
-    },
-    {
-      "type": "ansible-local",
-      "playbook_file": "../shared/main.yml",
-      "galaxy_file": "../shared/requirements.yml"
-    },
-    {
-      "type": "shell",
-      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
-      "script": "scripts/cleanup.sh"
-    }
-  ],
   "builders": [
     {
-      "type": "virtualbox-iso",
       "boot_command": [
         "<enter><wait><f6><esc><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
         "<bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs><bs>",
@@ -55,23 +33,21 @@
       ],
       "boot_wait": "10s",
       "disk_size": 81920,
+      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
       "guest_os_type": "Ubuntu_64",
       "headless": true,
       "http_directory": "http",
+      "iso_checksum": "sha256:16afb1375372c57471ea5e29803a89a5a6bd1f6aabea2e5e34ac1ab7eb9786ac",
       "iso_urls": [
         "iso/ubuntu-16.04.6-server-amd64.iso",
         "http://releases.ubuntu.com/16.04/ubuntu-16.04.6-server-amd64.iso"
       ],
-      "iso_checksum_type": "sha256",
-      "iso_checksum": "16afb1375372c57471ea5e29803a89a5a6bd1f6aabea2e5e34ac1ab7eb9786ac",
-      "ssh_username": "vagrant",
+      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
       "ssh_password": "vagrant",
       "ssh_port": 22,
-      "ssh_wait_timeout": "10000s",
-      "shutdown_command": "echo 'vagrant'|sudo -S shutdown -P now",
-      "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
-      "virtualbox_version_file": ".vbox_version",
-      "vm_name": "packer-ubuntu-16.04-amd64",
+      "ssh_timeout": "10000s",
+      "ssh_username": "vagrant",
+      "type": "virtualbox-iso",
       "vboxmanage": [
         [
           "modifyvm",
@@ -85,7 +61,9 @@
           "--cpus",
           "1"
         ]
-      ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "packer-ubuntu-16.04-amd64"
     }
   ],
   "post-processors": [
@@ -95,10 +73,28 @@
         "type": "vagrant"
       },
       {
-        "type": "vagrant-cloud",
         "box_tag": "mmichal/ubuntu16_04",
-        "version": "{{user `version`}}"
+        "type": "vagrant-cloud",
+        "version": "{{user `version`}}",
+        "access_token": "{{user `cloud_token`}}"
       }
     ]
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/ansible.sh",
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh",
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh",
+      "type": "shell"
+    }
   ]
 }

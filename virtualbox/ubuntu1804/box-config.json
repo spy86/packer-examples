@@ -1,6 +1,7 @@
 {
   "variables": {
-    "version": ""
+    "version": "{{env `VAGRANT_BOX_VERSION` }}",
+    "cloud_token": "{{env `VAGRANT_CLOUD_TOKEN` }}"
   },
   "provisioners": [
     {
@@ -90,14 +91,32 @@
   "post-processors": [
     [
       {
-        "output": "builds/{{.Provider}}-ubuntu1804.box",
+        "output": "builds/{{.Provider}}-ubuntu1604.box",
         "type": "vagrant"
       },
       {
+        "box_tag": "mmichal/ubuntu16_04",
         "type": "vagrant-cloud",
-        "box_tag": "mmichal/ubuntu18_04",
-        "version": "{{user `version`}}"
+        "version": "{{user `version`}}",
+        "access_token": "{{user `cloud_token`}}"
       }
     ]
+  ],
+  "provisioners": [
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/ansible.sh",
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/setup.sh",
+      "type": "shell"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "script": "scripts/cleanup.sh",
+      "type": "shell"
+    }
   ]
 }

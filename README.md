@@ -5,10 +5,13 @@ Examples of using the packer to create images of virtual machines for Virtualbox
 List below:
 
 * Microsoft Azure:
-  * Ubuntu
+  * Ubuntu 
   * Debian
   * CentOS
 * VagrantBox
-  * Ubuntu 16.04
-  * Ubuntu 18.04
-  * Ubuntu 20.04
+  * Ubuntu 16.04 - [link](https://app.vagrantup.com/mmichal/boxes/ubuntu16_04)
+  * Ubuntu 18.04 - [link](https://app.vagrantup.com/mmichal/boxes/ubuntu18_04)
+  * Ubuntu 20.04 - [link](https://app.vagrantup.com/mmichal/boxes/ubuntu20_04)
+  * CentOS 6 - [link](https://app.vagrantup.com/mmichal/boxes/centos6)
+  * CentOS 7 - [link](https://app.vagrantup.com/mmichal/boxes/centos7)
+  * CentOS 8 - [link](https://app.vagrantup.com/mmichal/boxes/centos8)

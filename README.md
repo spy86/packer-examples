@@ -15,3 +15,10 @@ List below:
   * CentOS 6 - [link](https://app.vagrantup.com/mmichal/boxes/centos6)
   * CentOS 7 - [link](https://app.vagrantup.com/mmichal/boxes/centos7)
   * CentOS 8 - [link](https://app.vagrantup.com/mmichal/boxes/centos8)
+  * Debian 8 -
+  * Debian 9 -
+  * Debian 10 -
+  * Windows 2012R2 -
+  * Windows 2016 -
+  * Windows 2019 -
+  * CoreOS - 
